@@ -19,7 +19,45 @@ attracting domestic migrants. 80% of the population growth in those
 counties, 11,000 people, was due to migration, with nearly all of it
 domestic. Less than half of the core’s growth is from migration.
 
-![](unnamed-chunk-1-1.png)<!-- -->
+``` r
+core<-D_PEP_2 %>% mutate(intlmig = as.numeric(intlmig)) %>% 
+  pivot_longer(-c("name", "year"), names_to="type", values_to="migration") %>% 
+  filter(name%in%c("Fulton County, Georgia", "DeKalb County, Georgia", 
+                   "Cobb County, Georgia",
+                   "Gwinnett County, Georgia","Clayton County, Georgia"))%>% 
+  group_by(year, type) %>% summarise( net_flow = sum(as.numeric(migration))) %>% 
+  ggplot(aes(x = year, y = net_flow,fill = type))+
+  geom_smooth(aes(color = type),se=FALSE)+
+  geom_point(shape =21, color = "black", size =1)+
+  scale_color_viridis(discrete = T,option ="plasma", 
+                      labels = c("Domestic", "International","Total"))+
+  scale_fill_viridis(discrete = T,option ="plasma", 
+                      labels = c("Domestic", "International","Total"))+
+  ylab("Migration")+ggtitle("")+ylim(-10000,60000)+
+  bbc_style()
+
+ex<-D_PEP_2 %>% mutate(intlmig = as.numeric(intlmig)) %>%
+  pivot_longer(-c("name", "year"), names_to="type", values_to="migration") %>% 
+  filter(name%in%c("Cherokee County, Georgia", "Douglas County, Georgia", "Fayette County, Georgia",
+                   "Henry County, Georgia","Rockdale County, Georgia"))%>% 
+  group_by(year, type) %>% summarise( net_flow = sum(as.numeric(migration))) %>%
+ ggplot(aes(x = year, y = net_flow,fill = type))+
+  geom_smooth(aes(color = type),se=FALSE)+
+  geom_point(shape =21, color = "black", size =1)+ theme_minimal()+
+  scale_color_viridis(discrete = T,option ="plasma")+
+  scale_fill_viridis(discrete = T,option ="plasma")+
+  ylim(-10000,60000)+ylab("Migration")+
+  bbc_style()
+
+plt<-ggarrange(core, ex, common.legend = TRUE, align="h")
+
+plt<-addSmallLegend(plt)
+
+annotate_figure(plt,top = text_grob("Core and Exurbs", size = 16, 
+                                  face = "bold"))
+```
+
+![](Atl_migration_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 Mike Carnathan, manager of the Atlanta Regional Council’s (ARC) Research
 and Analytics Division, has viewed the AJC’s analysis, and agrees with
@@ -144,7 +182,133 @@ The exact opposite is true in the exurbs. For each of the last 15 years,
 the average family size for families moving the exurbs from elsewhere in
 the U.S. has been larger than the average family size of those leaving.
 
-![](unnamed-chunk-2-1.png)<!-- -->
+``` r
+# 
+# core_inc<-D_IRS_06_18 %>% filter(state==13) %>% 
+#   filter(name%in%c( "Cobb County", "Clayton County", "DeKalb County","Fulton County", "Gwinnett County",  
+#                    "Dekalb County", "De Kalb County")) %>% 
+#   mutate(name = case_when(name%in%c("DeKalb County", "Dekalb County", "De Kalb County")~"DeKalb County", 
+#                           name%in%c("DeKalb County", "Dekalb County", "De Kalb County")==FALSE~name)) %>%
+#   mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+#          diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+#          avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+#   select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+#          avg_agi_in,avg_agi_out,avg_agi_diff)%>%
+#   ggplot(aes(x = year, y = avg_agi_diff, fill = name))+
+#   geom_smooth(aes(color = name),se=FALSE)+
+#   #geom_point(shape =21, color = "black", size =2)+
+#   scale_color_brewer(palette = "Paired", name="County")+
+#   scale_fill_brewer(palette = "Paired", name="County")+
+#   geom_hline(yintercept = 0)+
+#   xlab("year")+ylab("Change in 'average gross income'")+
+#   bbc_style()
+# 
+# core_inc<-addSmallLegend(core_inc)
+# 
+# ex_inc<-D_IRS_06_18 %>% filter(state==13) %>% 
+#   filter(name%in%c( "Cherokee County","Douglas County", "Fayette County","Henry County","Rockdale County")) %>%
+#   mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+#          diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+#          avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+#   select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+#          avg_agi_in,avg_agi_out,avg_agi_diff) %>%
+#    ggplot(aes(x = year, y = avg_agi_diff, fill = name))+
+#   geom_smooth(aes(color = name),se=FALSE)+
+#   geom_hline(yintercept = 0)+
+#   #geom_point(shape =21, color = "black", size =2)+
+#   scale_color_viridis(discrete=TRUE, name="County")+
+#   scale_fill_viridis(discrete=TRUE, name="County")+
+#   xlab("year")+ylab("Change in 'average gross income'")+bbc_style()
+# 
+# ex_inc<-addSmallLegend(ex_inc)
+# 
+# core_family<-D_IRS_06_18 %>% filter(state==13) %>% 
+#   filter(name%in%c( "Cobb County", "Clayton County", "DeKalb County","Fulton County", "Gwinnett County",  
+#                     "Dekalb County", "De Kalb County")) %>% 
+#   mutate(name = case_when(name%in%c("DeKalb County", "Dekalb County", "De Kalb County")~"DeKalb County", 
+#                           name%in%c("DeKalb County", "Dekalb County", "De Kalb County")==FALSE~name)) %>%
+#   mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+#          diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+#          avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+#   select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+#          avg_agi_in,avg_agi_out,avg_agi_diff) %>%
+#    ggplot(aes(x = year, y = diff_in_avg, fill = name))+
+#   geom_smooth(aes(color = name),se=FALSE)+
+#   geom_hline(yintercept = 0)+
+#   #geom_point(shape =21, color = "black", size =2)+
+#   scale_color_brewer(palette = "Paired", name="County")+
+#   scale_fill_brewer(palette = "Paired", name="County")+
+#   xlab("year")+ylab("Change in 'average family size'")+bbc_style()
+# 
+# core_family<-addSmallLegend(core_family)
+# 
+# ex_family<-D_IRS_06_18 %>% filter(state==13) %>% 
+#   filter(name%in%c( "Cherokee County","Douglas County", "Fayette County","Henry County","Rockdale County")) %>%
+#   mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+#          diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+#          avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+#   select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+#          avg_agi_in,avg_agi_out,avg_agi_diff) %>%
+#   ggplot(aes(x = year, y = diff_in_avg, fill = name))+
+#   geom_smooth(aes(color = name),se=FALSE)+
+#   geom_hline(yintercept = 0)+
+#   #geom_point(shape =21, color = "black", size =2)+
+#   scale_color_viridis(discrete=TRUE, name="County")+
+#   scale_fill_viridis(discrete=TRUE, name="County")+
+#   xlab("year")+ylab("Change in 'average family size'")+
+#   xlab("year")+ylab("Change in 'average family size'")+bbc_style()
+# 
+# ex_family<-addSmallLegend(ex_family)
+# 
+# core_plt<-ggarrange(core_family, core_inc, ncol=2, common.legend=TRUE) 
+# ex_plt<-ggarrange(ex_family, ex_inc, ncol = 2, common.legend=TRUE)
+# 
+# p<-ggarrange(core_family, ex_family, nrow=2)
+
+core_family<-D_IRS_06_18 %>% filter(state==13) %>% 
+  filter(name%in%c( "Cobb County", "Clayton County", "DeKalb County","Fulton County", "Gwinnett County",  
+                    "Dekalb County", "De Kalb County")) %>% 
+  mutate(name = case_when(name%in%c("DeKalb County", "Dekalb County", "De Kalb County")~"DeKalb County", 
+                          name%in%c("DeKalb County", "Dekalb County", "De Kalb County")==FALSE~name)) %>%
+  mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+         diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+         avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+  select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+         avg_agi_in,avg_agi_out,avg_agi_diff) %>% 
+  add_column(area="core")
+
+ex_family<-D_IRS_06_18 %>% filter(state==13) %>% 
+  filter(name%in%c( "Cherokee County","Douglas County", "Fayette County","Henry County","Rockdale County")) %>%
+  mutate(avg_ex_p_r_in = exempts_in/returns_in,avg_ex_p_ret_out = exempts_out/returns_out, 
+         diff_in_avg = avg_ex_p_r_in-avg_ex_p_ret_out, avg_agi_in = agi_in/exempts_in, 
+         avg_agi_out = agi_out/exempts_out, avg_agi_diff = avg_agi_in-avg_agi_out) %>%
+  select(name, year, returns.d, exempts.d, agi.d, avg_ex_p_r_in, avg_ex_p_ret_out, diff_in_avg,
+         avg_agi_in,avg_agi_out,avg_agi_diff) %>% add_column(area="ex") 
+
+family_plt<-rbind(core_family, ex_family)%>% 
+  mutate(name = str_split(name, " ") %>% 
+           lapply(function(x)return(x[1])) %>% unlist)
+
+plt<-family_plt%>%ggplot(aes(x = year, y = diff_in_avg, fill = name,linetype=area))+
+  geom_smooth(aes(color = name),se=FALSE)+
+  geom_hline(yintercept = 0, color = "black", alpha = .6, size = 1.1)+
+  #geom_point(shape =21, color = "black", size =2)+
+  scale_color_brewer(palette="Paired", name="County")+
+  scale_fill_brewer(palette = "Paired", name="County")+
+  xlab("year")+ylab("Change in 'average family size'")+
+  xlab("year")+ylab("Change in 'average family size'")+bbc_style()+
+  guides(linetype=FALSE)
+
+plt<-addSmallLegend(plt)
+
+plt<-annotate_figure(plt,top = text_grob("Change in family size", size = 16, 
+                                  face = "bold"))
+
+annotate_figure(plt,bottom = text_grob("Dashed is exurbs, solid is core", 
+                                     size = 11))
+```
+
+![](Atl_migration_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 Stone suggests that policy makers sometimes incentivize this trade.
 “\[They\] have a deeply misanthropic calculus,” he said. “It’s really
@@ -164,7 +328,46 @@ Atlanta prioritizes single-family housing. About 63% of the housing
 available in the city is reserved for single families, while only 37% is
 usable for any other kind of housing.
 
-![](unnamed-chunk-3-1.png)<!-- -->
+``` r
+####checking landuse in Atlanta. most of it is SFR
+shape_landuse_ATL <- st_read(dsn = "~/Desktop/Datasets/migration_politics/LandUse_Future/", 
+                    layer = "LandUse_Future", quiet= TRUE)
+
+shape_landuse_ATL_f<-shape_landuse_ATL %>%
+  mutate(sfr_or_not = case_when(LANDUSEDES=="Single-Family Residential"~"SFR",
+                                LANDUSEDES%in%c("Low-Density Commercial",
+                                                "Industrial",
+                                                "Office/Institutional",
+                                                "High-Density Commercial")~
+                                  "Commercial",
+                                LANDUSEDES%in%c("Medium-Density Residential",
+                                                "Low-Density Residential",
+                                                "Mixed-Use",
+                                                "High-Density Residential",
+                                                "Low-Density Mixed-Use",
+                                                "Medium-Density Mixed-Use",
+                                                "High-Density Mixed-Use",
+                                                "Very High-Density Residential",
+                                                "Mixed Use-High Density",
+                                                "Mixed Use-Low Density"
+                                                )~"Other_housing",
+                                (LANDUSEDES=="Single-Family Residential")== 
+                                  FALSE~"Other")
+         )
+
+plt<-shape_landuse_ATL_f %>% ggplot(aes(color = sfr_or_not, fill = sfr_or_not)) +geom_sf()+
+  scale_color_brewer(name="Zoning type", palette = "Dark2")+
+  scale_fill_brewer( name="Zoning type", palette = "Dark2")+bbc_style()+
+  theme(axis.text.x=element_blank(),
+          axis.text.y=element_blank())
+
+plt<-addSmallLegend(plt)
+
+annotate_figure(plt,top = text_grob("Atlanta plurality SFR", size = 16, 
+                                  face = "bold"))
+```
+
+![](Atl_migration_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 Importantly, housing types are segregated. Carnathan told the AJC that
 “You have lots of detached single-family housing stock and then you’ll
