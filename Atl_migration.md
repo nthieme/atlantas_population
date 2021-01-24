@@ -144,7 +144,7 @@ The exact opposite is true in the exurbs. For each of the last 15 years,
 the average family size for families moving the exurbs from elsewhere in
 the U.S. has been larger than the average family size of those leaving.
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](unnamed-chunk-2-1.png)<!-- -->
 
 Stone suggests that policy makers sometimes incentivize this trade.
 “\[They\] have a deeply misanthropic calculus,” he said. “It’s really
@@ -164,7 +164,7 @@ Atlanta prioritizes single-family housing. About 63% of the housing
 available in the city is reserved for single families, while only 37% is
 usable for any other kind of housing.
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](unnamed-chunk-3-1.png)<!-- -->
 
 Importantly, housing types are segregated. Carnathan told the AJC that
 “You have lots of detached single-family housing stock and then you’ll
