@@ -19,7 +19,7 @@ attracting domestic migrants. 80% of the population growth in those
 counties, 11,000 people, was due to migration, with nearly all of it
 domestic. Less than half of the core’s growth is from migration.
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](unnamed-chunk-1-1.png)<!-- -->
 
 Mike Carnathan, manager of the Atlanta Regional Council’s (ARC) Research
 and Analytics Division, has viewed the AJC’s analysis, and agrees with
