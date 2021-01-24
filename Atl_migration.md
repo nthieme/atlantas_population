@@ -57,7 +57,7 @@ annotate_figure(plt,top = text_grob("Core and Exurbs", size = 16,
                                   face = "bold"))
 ```
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+![](unnamed-chunk-1-1.png)<!-- -->
 
 Mike Carnathan, manager of the Atlanta Regional Council’s (ARC) Research
 and Analytics Division, has viewed the AJC’s analysis, and agrees with
@@ -308,7 +308,7 @@ annotate_figure(plt,bottom = text_grob("Dashed is exurbs, solid is core",
                                      size = 11))
 ```
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](unnamed-chunk-2-1.png)<!-- -->
 
 Stone suggests that policy makers sometimes incentivize this trade.
 “\[They\] have a deeply misanthropic calculus,” he said. “It’s really
@@ -367,7 +367,7 @@ annotate_figure(plt,top = text_grob("Atlanta plurality SFR", size = 16,
                                   face = "bold"))
 ```
 
-![](Atl_migration_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](unnamed-chunk-3-1.png)<!-- -->
 
 Importantly, housing types are segregated. Carnathan told the AJC that
 “You have lots of detached single-family housing stock and then you’ll
